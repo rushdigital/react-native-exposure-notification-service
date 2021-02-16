@@ -80,7 +80,6 @@ public class ProvideDiagnosisKeysWorker extends ListenableWorker {
     secureRandom = new SecureRandom();
     repository = new ExposureNotificationRepository(context);
     this.context = context;
-    setForegroundAsync(createForegroundInfo());
   }
 
   private String generateRandomToken() {
@@ -130,7 +129,9 @@ public class ProvideDiagnosisKeysWorker extends ListenableWorker {
   @Override
   public ListenableFuture<Result> startWork() {
       try {
-        setForegroundAsync(createForegroundInfo()).get();
+        if (SharedPrefs.getBoolean("hideForeground", this.context)) {
+          setForegroundAsync(createForegroundInfo()).get();
+        }
       }
       catch(Exception ex) {
           Events.raiseError("ProvideDiagnosisKeysWorker - startWork-foreground", ex);

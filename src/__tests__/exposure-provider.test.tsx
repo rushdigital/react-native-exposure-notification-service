@@ -687,7 +687,8 @@ describe('useExposure', () => {
         1
       );
       expect(ExposureNotificationModule.simulateExposure).toHaveBeenCalledWith(
-        10, 4
+        10,
+        4
       );
     });
   });

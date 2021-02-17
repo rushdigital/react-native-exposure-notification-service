@@ -118,7 +118,7 @@ export interface ExposureProviderProps {
   analyticsOptin?: boolean;
   notificationRepeat?: number;
   certList?: string;
-  hideNotification?: boolean;
+  hideForeground?: boolean;
 }
 
 export const getVersion = async () => {
@@ -163,7 +163,7 @@ export const ExposureProvider: React.FC<ExposureProviderProps> = ({
   analyticsOptin = false,
   notificationRepeat = 0,
   certList = '',
-  hideNotification
+  hideForeground
 }) => {
   const [state, setState] = useState<State>(initialState);
 
@@ -315,7 +315,7 @@ export const ExposureProvider: React.FC<ExposureProviderProps> = ({
         analyticsOptin,
         notificationRepeat,
         certList,
-        hideNotification
+        hideForeground
       };
       await ExposureNotification.configure(config);
 

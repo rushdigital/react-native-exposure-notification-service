@@ -128,8 +128,9 @@ public class ProvideDiagnosisKeysWorker extends ListenableWorker {
   @NonNull
   @Override
   public ListenableFuture<Result> startWork() {
+      boolean hideForeground = SharedPrefs.getBoolean("hideForeground", this.context);
       try {
-        if (!SharedPrefs.getBoolean("hideForeground", this.context)) {
+        if (!hideForeground) {
           setForegroundAsync(createForegroundInfo()).get();
         }
       }

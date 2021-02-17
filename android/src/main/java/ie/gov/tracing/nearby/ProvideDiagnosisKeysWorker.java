@@ -129,7 +129,7 @@ public class ProvideDiagnosisKeysWorker extends ListenableWorker {
   @Override
   public ListenableFuture<Result> startWork() {
       try {
-        if (SharedPrefs.getBoolean("hideForeground", this.context)) {
+        if (!SharedPrefs.getBoolean("hideForeground", this.context)) {
           setForegroundAsync(createForegroundInfo()).get();
         }
       }
@@ -138,7 +138,7 @@ public class ProvideDiagnosisKeysWorker extends ListenableWorker {
       }
       try {
         Tracing.currentContext = this.context;
-        Events.raiseEvent(Events.INFO, "ProvideDiagnosisKeysWorker.startWork");
+        Events.raiseEvent(Events.INFO, "ProvideDiagnosisKeysWorker.startWork foreground: " + !hideForeground);
         SharedPrefs.remove("lastApiError", this.context);
         SharedPrefs.remove("lastError", this.context);
         final boolean skipTimeCheck = getInputData().getBoolean("skipTimeCheck", false);

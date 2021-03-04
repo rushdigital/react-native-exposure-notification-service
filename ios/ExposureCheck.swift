@@ -239,6 +239,17 @@ class ExposureCheck: AsyncOperation {
         
         ExposureManager.shared.manager.detectExposures(configuration: configuration, diagnosisKeyURLs: files) { summary, error in
            
+            let userDefaults = UserDefaults.standard
+            let lastExposure = userDefaults.string(forKey: "lastExposure") ?? ""
+
+            let summaryText = summary == nil ? "empty" : "\(summary!)"
+
+            if lastExposure.isEmpty {
+                userDefaults.setValue(summaryText, forKey: "lastExposure")
+            } else {
+                userDefaults.setValue("\(lastExposure),\(summaryText)", forKey: "lastExposure")
+            }
+
            self.deleteLocalFiles(files)
            if let error = error {
               return self.finishProcessing(.failure(self.wrapError("Failure in detectExposures", error)))

@@ -132,10 +132,14 @@ public class StateUpdatedWorker extends ListenableWorker {
         return FluentFuture.from(risk.processKeys(context, simulate, simulateDays))
                 .transform(exposureEntity -> {
 
+                    String lastExposure = SharedPrefs.getString("lastExposure", this.context);
+                    SharedPrefs.setString("lastExposure", lastExposure + "," + gson.toJson(exposureEntity), this.context);
+
                     if (exposureEntity == null) {
                         Events.raiseEvent(Events.INFO, "No exposure returned, ending");
                         return Futures.immediateFuture(true);
                     }
+
                     if (!isMoreRecentExposure(exposureEntity)) {
                         Events.raiseEvent(Events.INFO, "Contact event is older than previously reported events");
                         return Futures.immediateFuture(true);

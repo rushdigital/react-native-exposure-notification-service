@@ -25,6 +25,7 @@ import ie.gov.tracing.common.ExposureConfig;
 import ie.gov.tracing.common.TaskToFutureAdapter;
 import ie.gov.tracing.nearby.ExposureNotificationClientWrapper;
 import ie.gov.tracing.storage.ExposureEntity;
+import ie.gov.tracing.storage.SharedPrefs;
 
 import java.time.Instant;
 import java.time.LocalDate;

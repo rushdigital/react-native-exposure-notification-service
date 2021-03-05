@@ -15,6 +15,7 @@ import com.google.android.gms.nearby.exposurenotification.ScanInstance;
 import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -275,6 +276,10 @@ public class RiskCalculationV2 implements RiskCalculation {
                         TimeUnit.MILLISECONDS,
                         AppExecutors.getScheduledExecutor()))
                     .transformAsync(exposureWindows -> {
+                        Gson gson = new Gson();
+                        String lastExposure = SharedPrefs.getString("lastExposure", context);
+                        SharedPrefs.setString("lastExposure", lastExposure + "," + gson.toJson(exposureWindows), context);
+
                         if (simulate) {
                             ExposureEntity exposureEntity = buildSimulatedExposureEntity(simulateDays);
                             return Futures.immediateFuture(exposureEntity);

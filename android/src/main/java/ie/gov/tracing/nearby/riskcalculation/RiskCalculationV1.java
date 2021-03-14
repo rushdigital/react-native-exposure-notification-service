@@ -6,7 +6,6 @@ import com.google.android.gms.nearby.exposurenotification.ExposureSummary;
 import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
-import com.google.gson.Gson;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -66,10 +65,6 @@ public class RiskCalculationV1 implements RiskCalculation {
                 TimeUnit.MILLISECONDS,
                 AppExecutors.getScheduledExecutor()))
                 .transformAsync((exposureSummary) -> {
-                    Gson gson = new Gson();
-                    String lastExposure = SharedPrefs.getString("lastExposure", context);
-                    SharedPrefs.setString("lastExposure", lastExposure + "," + gson.toJson(exposureSummary), context);
-
                     Events.raiseEvent(Events.INFO, "StatusUpdatedWorker - checking results, simulate: " + simulate);
                     if (simulate) {
                         exposureSummary = buildSimulateSummary(simulateDays);

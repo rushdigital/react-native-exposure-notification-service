@@ -825,7 +825,6 @@ object Tracing {
             map.putString("lastRun", SharedPrefs.getString("lastRun", context))
             map.putString("lastError", SharedPrefs.getString("lastError", context))
             map.putString("lastApiError", SharedPrefs.getString("lastApiError", context))
-            map.putString("lastExposure", SharedPrefs.getString("lastExposure", context))
 
             promise.resolve(map)
         }

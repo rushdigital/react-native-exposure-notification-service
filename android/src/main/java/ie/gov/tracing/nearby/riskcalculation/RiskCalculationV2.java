@@ -47,8 +47,6 @@ public class RiskCalculationV2 implements RiskCalculation {
             ensConfig = config;
         }
 
-    private static final double DAY = 60.0 * 60.0 * 24.0 * 1000.0;
-
     @RequiresApi(api = Build.VERSION_CODES.O)
     @NotNull
     private ExposureEntity buildSimulatedExposureEntity(int simulateDays) {
@@ -114,7 +112,7 @@ public class RiskCalculationV2 implements RiskCalculation {
 
         List<WindowData> filteredWindows = new ArrayList<>();
         for (int i = 0; i < windows.size(); i++) {
-            long dayVal = calcEpochDay(windows.get(i).getDate());
+            long dayVal = Instant.ofEpochMilli(windows.get(i).getDate()).atZone(ZoneId.systemDefault()).toLocalDate().toEpochDay();
             if (dayVal == summary.getDaysSinceEpoch()) {
                 filteredWindows.add(windows.get(i));
             }
@@ -245,7 +243,7 @@ public class RiskCalculationV2 implements RiskCalculation {
         if (config.getContiguousMode()) {
             List<WindowData> exceeded = filterForExceededWindows(windowItems);
             if (exceeded.size() > 0) {
-                long dayVal = calcEpochDay(exceeded.get(0).getDate());
+                long dayVal = Instant.ofEpochMilli(exceeded.get(0).getDate()).atZone(ZoneId.systemDefault()).toLocalDate().toEpochDay();
 
                 DailySummary day = findDay(valid, dayVal);
                 if (day != null) {
@@ -261,10 +259,6 @@ public class RiskCalculationV2 implements RiskCalculation {
         } else {
             return constructSummaryInfo(valid.get(0), windowItems);
         }
-    }
-
-    private long calcEpochDay(long timestamp) {
-        return (long) Math.floor(timestamp / DAY);
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

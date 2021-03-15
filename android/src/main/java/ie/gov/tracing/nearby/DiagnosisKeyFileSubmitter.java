@@ -11,6 +11,8 @@ import org.threeten.bp.Duration;
 import java.io.File;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import ie.gov.tracing.ExposureNotificationModule;
 import ie.gov.tracing.Tracing;
 import ie.gov.tracing.common.AppExecutors;
 import ie.gov.tracing.common.Events;

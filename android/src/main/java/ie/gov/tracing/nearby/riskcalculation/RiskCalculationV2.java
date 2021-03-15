@@ -15,6 +15,7 @@ import com.google.android.gms.nearby.exposurenotification.ScanInstance;
 import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -299,6 +300,10 @@ public class RiskCalculationV2 implements RiskCalculation {
                             Events.raiseEvent(Events.INFO, "exposureWindows - empty dailySummaries");
                             return Futures.immediateFuture(null);
                         }
+
+                        Gson gson = new Gson();
+                        Events.raiseEvent(Events.INFO, "exposureWindows - " + gson.toJson(exposureWindows));
+                        Events.raiseEvent(Events.INFO, "dailySummaries - " + gson.toJson(dailySummaries));
 
                         ExposureEntity exposureEntity = buildExposureEntity(dailySummaries, exposureWindows, ensConfig);
 

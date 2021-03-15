@@ -227,4 +227,8 @@ public class ExposureNotificationModule extends ReactContextBaseJavaModule {
     private PackageInfo getPackageInfo() throws Exception {
         return Tracing.reactContext.getApplicationContext().getPackageManager().getPackageInfo(Tracing.reactContext.getApplicationContext().getPackageName(), 0);
     }
+
+    public static boolean canSupportV2() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
+    }
 }

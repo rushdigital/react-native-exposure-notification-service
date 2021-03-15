@@ -110,7 +110,7 @@ public class StateUpdatedWorker extends ListenableWorker {
         String configData = SharedPrefs.getString("exposureConfig", this.context);
         if (!configData.isEmpty()) {
             config = gson.fromJson(configData, ExposureConfig.class);
-            inV2Mode = config.getV2Mode();
+            inV2Mode = config.getV2Mode() && ExposureNotificationModule.canSupportV2();
         }
 
         ExposureNotificationClientWrapper exposureNotificationClient = ExposureNotificationClientWrapper.get(context);

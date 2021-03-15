@@ -36,7 +36,7 @@ class DiagnosisKeyFileSubmitter {
 
     Events.raiseEvent(Events.INFO, "Processing " + files.size() + " export files...");
 
-    if (config.getV2Mode()) {
+    if (config.getV2Mode() && ExposureNotificationModule.canSupportV2()) {
       client.setDiagnosisKeysDataMapping(config);
       return TaskToFutureAdapter.getFutureWithTimeout(
                   client.provideDiagnosisKeys(files),

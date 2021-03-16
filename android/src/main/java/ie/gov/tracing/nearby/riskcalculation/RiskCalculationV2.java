@@ -312,7 +312,6 @@ public class RiskCalculationV2 implements RiskCalculation {
                             return Futures.immediateFuture(null);
                         }
 
-                        Gson gson = new Gson();
                         Events.raiseEvent(Events.INFO, "exposureWindows - " + gson.toJson(exposureWindows));
                         Events.raiseEvent(Events.INFO, "dailySummaries - " + gson.toJson(dailySummaries));
 

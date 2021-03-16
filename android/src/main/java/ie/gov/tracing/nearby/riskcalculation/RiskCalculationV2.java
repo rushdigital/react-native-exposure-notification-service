@@ -25,6 +25,7 @@ import ie.gov.tracing.common.ExposureConfig;
 import ie.gov.tracing.common.TaskToFutureAdapter;
 import ie.gov.tracing.nearby.ExposureNotificationClientWrapper;
 import ie.gov.tracing.storage.ExposureEntity;
+import ie.gov.tracing.storage.SharedPrefs;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -33,7 +34,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -276,6 +279,14 @@ public class RiskCalculationV2 implements RiskCalculation {
                         TimeUnit.MILLISECONDS,
                         AppExecutors.getScheduledExecutor()))
                     .transformAsync(exposureWindows -> {
+                        Gson gson = new Gson();
+                        Map<String, Object> map = new HashMap<String, Object>() {{
+                            put("dailySummaries", dailySummaries);
+                            put("exposureWindows", exposureWindows);
+                        }};
+                        String lastExposure = SharedPrefs.getString("lastExposure", context);
+                        SharedPrefs.setString("lastExposure", lastExposure + "," + gson.toJson(map), context);
+
                         if (simulate) {
                             ExposureEntity exposureEntity = buildSimulatedExposureEntity(simulateDays);
                             return Futures.immediateFuture(exposureEntity);

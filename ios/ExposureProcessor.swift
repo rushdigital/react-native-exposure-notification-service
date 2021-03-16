@@ -244,6 +244,7 @@ public class ExposureProcessor {
       data["lastRun"] = config.datesLastRan
       data["lastError"] = config.lastError ?? ""
       data["lastIndex"] = config.lastExposureIndex ?? 0
+      data["lastExposure"] = UserDefaults.standard.string(forKey: "lastExposure")
       resolve(data)
       
     }

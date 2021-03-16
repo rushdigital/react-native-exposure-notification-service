@@ -132,11 +132,11 @@ public class StateUpdatedWorker extends ListenableWorker {
 
         return FluentFuture.from(risk.processKeys(context, simulate, simulateDays))
                 .transform(exposureEntity -> {
-
                     if (exposureEntity == null) {
                         Events.raiseEvent(Events.INFO, "No exposure returned, ending");
                         return Futures.immediateFuture(true);
                     }
+
                     if (!isMoreRecentExposure(exposureEntity)) {
                         Events.raiseEvent(Events.INFO, "Contact event is older than previously reported events");
                         return Futures.immediateFuture(true);

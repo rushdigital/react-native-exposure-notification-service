@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import ie.gov.tracing.ExposureNotificationModule;
 import ie.gov.tracing.R;
 import ie.gov.tracing.Tracing;
 import ie.gov.tracing.common.AppExecutors;
@@ -110,7 +111,7 @@ public class StateUpdatedWorker extends ListenableWorker {
         String configData = SharedPrefs.getString("exposureConfig", this.context);
         if (!configData.isEmpty()) {
             config = gson.fromJson(configData, ExposureConfig.class);
-            inV2Mode = config.getV2Mode();
+            inV2Mode = config.getV2Mode() && ExposureNotificationModule.canSupportV2();
         }
 
         ExposureNotificationClientWrapper exposureNotificationClient = ExposureNotificationClientWrapper.get(context);
@@ -131,11 +132,11 @@ public class StateUpdatedWorker extends ListenableWorker {
 
         return FluentFuture.from(risk.processKeys(context, simulate, simulateDays))
                 .transform(exposureEntity -> {
-
                     if (exposureEntity == null) {
                         Events.raiseEvent(Events.INFO, "No exposure returned, ending");
                         return Futures.immediateFuture(true);
                     }
+
                     if (!isMoreRecentExposure(exposureEntity)) {
                         Events.raiseEvent(Events.INFO, "Contact event is older than previously reported events");
                         return Futures.immediateFuture(true);

@@ -11,6 +11,8 @@ import org.threeten.bp.Duration;
 import java.io.File;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import ie.gov.tracing.ExposureNotificationModule;
 import ie.gov.tracing.Tracing;
 import ie.gov.tracing.common.AppExecutors;
 import ie.gov.tracing.common.Events;
@@ -36,7 +38,7 @@ class DiagnosisKeyFileSubmitter {
 
     Events.raiseEvent(Events.INFO, "Processing " + files.size() + " export files...");
 
-    if (config.getV2Mode()) {
+    if (config.getV2Mode() && ExposureNotificationModule.canSupportV2()) {
       client.setDiagnosisKeysDataMapping(config);
       return TaskToFutureAdapter.getFutureWithTimeout(
                   client.provideDiagnosisKeys(files),
